@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Avatar, Box, IconButton, ListItemDecorator, MenuItem, Typography } from '@mui/joy';
+import { Avatar, Box, IconButton, ListItemButton, ListItemDecorator, Typography } from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -88,7 +88,7 @@ function ChatNavigationItem(props: {
   const progress = props.maxChatMessages ? 100 * messageCount / props.maxChatMessages : 0;
 
   return (
-    <MenuItem
+    <ListItemButton
       variant={isActive ? 'solid' : 'plain'} color='neutral'
       selected={isActive}
       onClick={handleConversationActivate}
@@ -172,7 +172,7 @@ function ChatNavigationItem(props: {
           <CloseIcon />
         </IconButton>
       </>}
-    </MenuItem>
+    </ListItemButton>
 
   );
 }

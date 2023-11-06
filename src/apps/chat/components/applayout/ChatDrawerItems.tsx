@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'zustand/shallow';
 
-import { Box, ListDivider, ListItemDecorator, MenuItem, Typography } from '@mui/joy';
+import { Box, ListDivider, ListItemButton, ListItemDecorator, Typography } from '@mui/joy';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -90,13 +90,13 @@ function ChatDrawerItems(props: {
     {/*  </Typography>*/}
     {/*</ListItem>*/}
 
-    <MenuItem disabled={props.disableNewButton} onClick={handleButtonNew}>
+    <ListItemButton disabled={props.disableNewButton} onClick={handleButtonNew}>
       <ListItemDecorator><AddIcon /></ListItemDecorator>
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', gap: 1 }}>
         New
         {/*<KeyStroke combo='Ctrl + Alt + N' />*/}
       </Box>
-    </MenuItem>
+    </ListItemButton>
 
     <ListDivider sx={{ mb: 0 }} />
 
@@ -130,20 +130,20 @@ function ChatDrawerItems(props: {
 
     <ListDivider sx={{ mt: 0 }} />
 
-    <MenuItem onClick={props.onConversationImportDialog}>
+    <ListItemButton onClick={props.onConversationImportDialog}>
       <ListItemDecorator>
         <FileUploadIcon />
       </ListItemDecorator>
       Import chats
       <OpenAIIcon sx={{ fontSize: 'xl', ml: 'auto' }} />
-    </MenuItem>
+    </ListItemButton>
 
-    <MenuItem disabled={!hasChats} onClick={props.onConversationsDeleteAll}>
+    <ListItemButton disabled={!hasChats} onClick={props.onConversationsDeleteAll}>
       <ListItemDecorator><DeleteOutlineIcon /></ListItemDecorator>
       <Typography>
         Delete {totalConversations >= 2 ? `all ${totalConversations} chats` : 'chat'}
       </Typography>
-    </MenuItem>
+    </ListItemButton>
 
   </>;
 }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, IconButton, ListDivider, ListItemDecorator, MenuItem, Sheet, Typography, useColorScheme } from '@mui/joy';
+import { Box, DialogContent, DialogTitle, Drawer, IconButton, List, ListDivider, ListItemDecorator, MenuItem, ModalClose, Sheet, Typography, useColorScheme } from '@mui/joy';
 import { SxProps } from '@mui/joy/styles/types';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -133,13 +133,22 @@ export function AppBar(props: { sx?: SxProps }) {
 
 
     {/* Drawer Menu */}
-    {!!drawerItems && <CloseableMenu
-      maxHeightGapPx={56 + 24} sx={{ minWidth: 320 }}
-      open={!!drawerAnchor} anchorEl={drawerAnchor} onClose={closeLayoutDrawer}
-      placement='bottom-start'
+    {!!drawerItems && <Drawer
+      // maxHeightGapPx={56 + 24}
+      // sx={{ minWidth: 320 }}
+      open={!!drawerAnchor}
+      // anchorEl={drawerAnchor}
+      onClose={closeLayoutDrawer}
+      // placement='bottom-start'
     >
-      {drawerItems}
-    </CloseableMenu>}
+      <ModalClose />
+      <DialogTitle>Temp menu</DialogTitle>
+      {/*<DialogContent>*/}
+        <List>
+          {drawerItems}
+        </List>
+      {/*</DialogContent>*/}
+    </Drawer>}
 
     {/* Menu Menu */}
     <CloseableMenu
