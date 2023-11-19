@@ -5,7 +5,7 @@ import { FormControl, Switch } from '@mui/joy';
 import { FormLabelStart } from '~/common/components/forms/FormLabelStart';
 import { Link } from '~/common/components/Link';
 
-import { useChatAutoAI } from '../chat/store-app-chat';
+import { useChatAutoAI } from '../../../apps/chat/store-app-chat';
 
 
 export function AppChatSettingsAI() {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { ChatMessage } from '../chat/components/message/ChatMessage';
+import { ChatMessage } from '../../../apps/chat/components/message/ChatMessage';
 
 import { GoodModal } from '~/common/components/GoodModal';
 import { closeLayoutShortcuts, useLayoutShortcuts } from '~/common/layout/store-applayout';

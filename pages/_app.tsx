@@ -11,6 +11,7 @@ import '~/common/styles/CodePrism.css';
 import '~/common/styles/GithubMarkdown.css';
 
 import { ProviderBackend } from '~/common/state/ProviderBackend';
+import { ProviderNavigationLogic } from '../src/apps/main/ProviderNavigationLogic';
 import { ProviderSnacks } from '~/common/state/ProviderSnacks';
 import { ProviderTRPCQueryClient } from '~/common/state/ProviderTRPCQueryClient';
 import { ProviderTheming } from '~/common/state/ProviderTheming';
@@ -27,9 +28,11 @@ const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) =>
     <ProviderTheming emotionCache={emotionCache}>
       <ProviderTRPCQueryClient>
         <ProviderSnacks>
-          <ProviderBackend>
-            <Component {...pageProps} />
-          </ProviderBackend>
+          <ProviderNavigationLogic>
+            <ProviderBackend>
+              <Component {...pageProps} />
+            </ProviderBackend>
+          </ProviderNavigationLogic>
         </ProviderSnacks>
       </ProviderTRPCQueryClient>
     </ProviderTheming>

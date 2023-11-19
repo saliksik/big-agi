@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { FormControl } from '@mui/joy';
 
-import { useChatAutoAI, useChatMicTimeoutMs } from '../chat/store-app-chat';
+import { useChatAutoAI, useChatMicTimeoutMs } from '../../../apps/chat/store-app-chat';
 
 import { useElevenLabsVoices } from '~/modules/elevenlabs/useElevenLabsVoiceDropdown';
 
