@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { Avatar, Box, IconButton, ListItemButton, ListItemDecorator, Typography } from '@mui/joy';
-import { SxProps } from '@mui/joy/styles/types';
+import { Avatar, Box, IconButton, ListItem, ListItemDecorator, MenuItem, Sheet, Typography } from '@mui/joy';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
@@ -54,7 +53,7 @@ function ChatNavigationItem(props: {
   }, [deleteArmed, isActive]);
 
 
-  const handleConversationActivate = () => props.onConversationActivate(conversationId, true);
+  const handleConversationActivate = () => props.onConversationActivate(conversationId, false);
 
   const handleTitleEdit = () => setIsEditingTitle(true);
 
@@ -83,64 +82,117 @@ function ChatNavigationItem(props: {
 
 
   const textSymbol = SystemPurposes[systemPurposeId]?.symbol || '❓';
-  const buttonSx: SxProps = { ml: 1, ...(isActive ? { color: 'white' } : {}) };
+  // const buttonSx: SxProps = { ml: 1, ...(isActive ? { color: 'white' } : {}) };
 
   const progress = props.maxChatMessages ? 100 * messageCount / props.maxChatMessages : 0;
 
   return (
-    <ListItemButton
+    <Sheet
       variant={isActive ? 'solid' : 'plain'} color='neutral'
-      selected={isActive}
-      onClick={handleConversationActivate}
+      invertedColors={isActive}
+      // selected={isActive}
       sx={{
         // py: 0,
         position: 'relative',
         border: 'none', // note, there's a default border of 1px and invisible.. hmm
-        '&:hover > button': { opacity: 1 },
-        ...(isActive ? { bgcolor: 'red' } : {}),
+        ...(isActive ? {
+          // borderRadius: 'md',
+          boxShadow: 'md',
+          // overflow: 'hidden',
+          '--ListItem-minHeight': '44px',
+        } : {
+          backgroundColor: 'transparent',
+        }),
       }}
     >
 
       {/* Optional progress bar, underlay */}
-      {progress > 0 && (
+      {progress > 0 && !isActive && (
         <Box sx={{
           backgroundColor: 'neutral.softActiveBg',
           position: 'absolute', left: 0, bottom: 0, width: progress + '%', height: 4,
         }} />
       )}
 
-      {/* Icon */}
-      {props.showSymbols && <ListItemDecorator>
-        {assistantTyping
-          ? (
-            <Avatar
-              alt='typing' variant='plain'
-              src='https://i.giphy.com/media/jJxaUysjzO9ri/giphy.webp'
-              sx={{
-                width: 24,
-                height: 24,
-                borderRadius: 'var(--joy-radius-sm)',
-              }}
-            />
-          ) : (
-            <Typography sx={{ fontSize: '18px' }}>
-              {isNew ? '' : textSymbol}
-            </Typography>
-          )}
-      </ListItemDecorator>}
+      {/* First Row */}
+      <MenuItem
+        onClick={() => isActive || handleConversationActivate()}
+        sx={isActive ? {
+          mb: 0, pb: 0,
+        } : {}}
+      >
 
-      {/* Text */}
-      {!isEditingTitle ? (
+        {/* Icon */}
+        {props.showSymbols && <ListItemDecorator>
+          {assistantTyping
+            ? (
+              <Avatar
+                alt='typing' variant='plain'
+                src='https://i.giphy.com/media/jJxaUysjzO9ri/giphy.webp'
+                sx={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 'var(--joy-radius-sm)',
+                }}
+              />
+            ) : (
+              <Typography sx={{ fontSize: '18px' }}>
+                {isNew ? '' : textSymbol}
+              </Typography>
+            )}
+        </ListItemDecorator>}
 
-        <Box onDoubleClick={() => doubleClickToEdit ? handleTitleEdit() : null} sx={{ flexGrow: 1 }}>
-          {DEBUG_CONVERSATION_IDs ? conversationId.slice(0, 10) : title}{assistantTyping && '...'}
+        {/* Text */}
+        {!isEditingTitle ? (
+
+          <Box onDoubleClick={() => doubleClickToEdit ? handleTitleEdit() : null} sx={{ flexGrow: 1 }}>
+            {DEBUG_CONVERSATION_IDs ? conversationId.slice(0, 10) : title}{assistantTyping && '...'}
+          </Box>
+
+        ) : (
+
+          <InlineTextarea initialText={title} onEdit={handleTitleEdited} sx={{ ml: -1.5, mr: -0.5, flexGrow: 1 }} />
+
+        )}
+
+      </MenuItem>
+
+
+      {isActive && <ListItem sx={{
+        pt: 0, mt: 0,
+      }}>
+
+        <Box sx={{ display: 'flex', gap: 1 }}>
+
+          <IconButton size='sm' onClick={handleDeleteButtonHide}>
+            <CloseIcon />
+            XXX
+          </IconButton>
+
         </Box>
 
-      ) : (
+        {/* Delete */}
+        {!props.isLonely && <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+          {deleteArmed && <IconButton size='sm' data-skip-inverted-colors variant='soft' color='danger' onClick={handleConversationDelete}>
+            <DeleteOutlineIcon />
+          </IconButton>}
 
-        <InlineTextarea initialText={title} onEdit={handleTitleEdited} sx={{ ml: -1.5, mr: -0.5, flexGrow: 1 }} />
+          {deleteArmed && <IconButton size='sm' onClick={handleDeleteButtonHide}>
+            <CloseIcon />
+          </IconButton>}
 
-      )}
+          {!deleteArmed && <IconButton
+            // variant={isActive ? 'solid' : 'outlined'}
+            size='sm'
+            onClick={handleDeleteButtonShow}
+            sx={{ ml: 'auto' }}
+          >
+            <DeleteOutlineIcon />
+          </IconButton>}
+        </Box>}
+
+      </ListItem>}
+
 
       {/* // TODO: Commented code */}
       {/* Edit */}
@@ -153,26 +205,8 @@ function ChatNavigationItem(props: {
       {/*  <EditIcon />*/}
       {/*</IconButton>*/}
 
-      {/* Delete Arming */}
-      {!props.isLonely && !deleteArmed && (
-        <IconButton
-          variant={isActive ? 'solid' : 'outlined'} color='neutral'
-          size='sm' sx={{ opacity: { xs: 1, sm: 0 }, transition: 'opacity 0.3s', ...buttonSx }}
-          onClick={handleDeleteButtonShow}>
-          <DeleteOutlineIcon />
-        </IconButton>
-      )}
 
-      {/* Delete / Cancel buttons */}
-      {!props.isLonely && deleteArmed && <>
-        <IconButton size='sm' variant='solid' color='danger' sx={buttonSx} onClick={handleConversationDelete}>
-          <DeleteOutlineIcon />
-        </IconButton>
-        <IconButton size='sm' variant='solid' color='neutral' sx={buttonSx} onClick={handleDeleteButtonHide}>
-          <CloseIcon />
-        </IconButton>
-      </>}
-    </ListItemButton>
+    </Sheet>
 
   );
 }
